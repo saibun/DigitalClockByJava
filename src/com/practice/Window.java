@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.swing.Timer;  
 
@@ -19,7 +20,8 @@ public class Window extends JFrame {
         super.setSize(500, 500);
         super.setLocation(700, 50);
         this.Gui();//Loading gui() method befor loading JFrame window
-        this.StartClock();
+        //this.StartClock();
+        this.StartClockByThread();
         super.setVisible(true);
         
         
@@ -44,7 +46,11 @@ public class Window extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                //String datetime = new Date().toString();
-               String datetime = new Date().toLocaleString();
+              // String datetime = new Date().toLocaleString();
+              Date d = new Date();
+              String pattern = "EEEEE MMMMM yyyy HH:mm:ss";
+              SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+              String datetime =sdf.format(d);
                clocktext.setText(datetime);
             }
             
@@ -52,5 +58,30 @@ public class Window extends JFrame {
         timmer.start();
 
     }
+    public void StartClockByThread(){
+        Thread t = new Thread(){
+            public void run(){
+                try{
+                    while(true){
+                        Date d = new Date();
+                        String pattern = "EEEEE MMMMM yyyy HH:mm:ss";
+                        SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+                        String datetime =sdf.format(d);
+                        clocktext.setText(datetime);
+                        Thread.sleep(1000);
+
+                    }
+
+                }catch(Exception e){
+                    e.printStackTrace();
     
+                }
+
+            }
+            
+            
+
+        };
+        t.start();
+    }
 }
